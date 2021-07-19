@@ -49,7 +49,14 @@ class MailchimpManager:
         Raises:
             TODO: Document all possible errors
         """
-    
+	try:
+		keys["server"] = self.server
+		keys["api_key"] = self.api_key
+	except ValueError:
+		print("parameters given are invalid")
+	except TypeError:
+		print("missing parameters")
+		    
     def ping(self) -> Response:
         """
         Ping Mailchimp server to check for connection and authroisation.
