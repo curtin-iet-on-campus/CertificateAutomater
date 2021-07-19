@@ -18,6 +18,8 @@ from requests import *
 
 from src.attendees.attendee_manager import Attendee, AttendeeManager
 
+import json
+
 StatusFunc = Callable[[Attendee, Exception], None]
 
 class MailchimpManager:
@@ -70,22 +72,13 @@ class MailchimpManager:
         Raises:
             TODO: Detail potential errors
         """
-   	try:
+        try:
                 client = MailchimpMarketing.Client()
                 client.set_config(self.keys)
-
-                response = client.batches.start(operation = {
-        "method": "POST",
-        "path": f"/lists/{list_id}/members",
-        "operation_id": user['id'],
-        "body": json.dumps({
-            "email_address": user['email'],
-            "status": "subscribed"
-        })
-
+                response = client.ping.get()
                 print(response)
         except ApiClientError as error:
-		print("Error: {}".format(error.text))
+                print("Error: {}".format(error.text))
  
     def create_folder(self, foldername: str) -> int:
         """
