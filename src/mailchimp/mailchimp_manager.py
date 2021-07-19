@@ -25,12 +25,13 @@ class MailchimpManager:
         TODO: detail public attributes
     """
 
-    def __init__(self):
+    def __init__(self, api_key, server):
         """
         Constructor
         """
-        raise NotImplementedError
-    
+   	self.server = server
+	self.api_key = api_key
+ 
     def set_authorisation(self, keys: Dict[str, str]) -> bool:
         """
         Set keys needed to authorise self.
@@ -48,7 +49,6 @@ class MailchimpManager:
         Raises:
             TODO: Document all possible errors
         """
-        raise NotImplementedError
     
     def ping(self) -> Response:
         """
