@@ -8,6 +8,9 @@ TODO:
     * Implement methods
     * Implement datalogging
 """
+import mailchimp_marketing as MailchimpMarketing
+
+from mailchimp_marketing.api_client import ApiClientError
 
 from typing import *
 
@@ -67,8 +70,23 @@ class MailchimpManager:
         Raises:
             TODO: Detail potential errors
         """
-        raise NotImplementedError
-    
+   	try:
+                client = MailchimpMarketing.Client()
+                client.set_config(self.keys)
+
+                response = client.batches.start(operation = {
+        "method": "POST",
+        "path": f"/lists/{list_id}/members",
+        "operation_id": user['id'],
+        "body": json.dumps({
+            "email_address": user['email'],
+            "status": "subscribed"
+        })
+
+                print(response)
+        except ApiClientError as error:
+		print("Error: {}".format(error.text))
+ 
     def create_folder(self, foldername: str) -> int:
         """
         Creates folder on user's Mailchimp account.
