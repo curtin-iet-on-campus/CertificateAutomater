@@ -95,9 +95,15 @@ class MailchimpManager:
         Raises:
             TODO: Document all possible errors
         """
-        raise NotImplementedError
-
-    def upload_certificates(self, attendees: AttendeeManager,
+	try:
+                client = MailchimpMarketing.Client()
+                client.set_config(self.keys)
+                response = client.fileManager.create_folder({"name": foldername})
+                return response["id"]
+        except ApiClientError as error:
+                print("Error: {}".format(error.text))
+    
+	def upload_certificates(self, attendees: AttendeeManager,
                             folder_id: int = None,
                             status_func: StatusFunc = None
                             ) -> str:
