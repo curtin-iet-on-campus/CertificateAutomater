@@ -8,6 +8,10 @@ TODO:
     * Implement methods
     * Implement datalogging
 """
+import json
+
+import base64
+
 import mailchimp_marketing as MailchimpMarketing
 
 from mailchimp_marketing.api_client import ApiClientError
@@ -17,10 +21,6 @@ from typing import *
 from requests import *
 
 from src.attendees.attendee_manager import Attendee, AttendeeManager
-
-import base64
-
-import json
 
 StatusFunc = Callable[[Attendee, Exception], None]
 
