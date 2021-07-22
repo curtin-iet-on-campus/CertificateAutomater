@@ -18,6 +18,8 @@ from requests import *
 
 from src.attendees.attendee_manager import Attendee, AttendeeManager
 
+import base64
+
 import json
 
 StatusFunc = Callable[[Attendee, Exception], None]
@@ -57,12 +59,10 @@ class MailchimpManager:
 	try:
 		keys["server"] = self.server
 		keys["api_key"] = self.api_key
-	except ValueError:
-		print("parameters given are invalid")
-	except TypeError:
-		print("missing parameters")
+	except:
+		raise AttributeError
 		    
-    def ping(self) -> Response:
+    def ping(self) ->
         """
         Ping Mailchimp server to check for connection and authroisation.
 
@@ -76,7 +76,7 @@ class MailchimpManager:
                 client = MailchimpMarketing.Client()
                 client.set_config(self.keys)
                 response = client.ping.get()
-                print(response)
+                return response
         except ApiClientError as error:
                 print("Error: {}".format(error.text))
  
@@ -103,7 +103,7 @@ class MailchimpManager:
         except ApiClientError as error:
                 print("Error: {}".format(error.text))
     
-	def upload_certificates(self, attendees: AttendeeManager,
+    def upload_certificates(self, attendees: AttendeeManager,
                             folder_id: int = None,
                             status_func: StatusFunc = None
                             ) -> str:
