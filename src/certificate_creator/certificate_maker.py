@@ -40,3 +40,5 @@ def createCertificate(in_path: str, out_path: str, attendees: AttendeeManager,
         TODO: Document exact errors that can be raised.
     """
     raise NotImplementedError
+
+mock commit
