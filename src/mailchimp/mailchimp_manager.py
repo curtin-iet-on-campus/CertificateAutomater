@@ -31,14 +31,10 @@ class MailchimpManager:
     Attributes:
         TODO: detail public attributes
     """
-
-    def __init__(self, api_key, server):
-        """
-        Constructor
-        """
-   	self.server = server
-	self.api_key = api_key
- 
+	
+    def __init__(self):
+ 	self._client = MailchimpMarketing.Client()
+  	
     def set_authorisation(self, keys: Dict[str, str]) -> bool:
         """
         Set keys needed to authorise self.
@@ -56,11 +52,19 @@ class MailchimpManager:
         Raises:
             TODO: Document all possible errors
         """
-	try:
-		keys["server"] = self.server
-		keys["api_key"] = self.api_key
-	except:
-		raise AttributeError
+	if type(keys) != dict:
+		raise TypeError
+	if "server" not in keys:
+		raise ValueError
+	if "api_key" or "access_token" not in keys:
+		raise ValueError
+	for value in keys.values():
+		if type(value) != str:
+			raise TypeError
+		if value == "":
+			raise ValueError
+	return True
+		
 		    
     def ping(self) ->
         """
@@ -73,12 +77,11 @@ class MailchimpManager:
             TODO: Detail potential errors
         """
         try:
-                client = MailchimpMarketing.Client()
-                client.set_config(self.keys)
+                self._client.set_config(self.keys)
                 response = client.ping.get()
                 return response
-        except ApiClientError as error:
-                print("Error: {}".format(error.text))
+        except ApiClietError:
+		raise ApiClientError
  
     def create_folder(self, foldername: str) -> int:
         """
@@ -96,12 +99,11 @@ class MailchimpManager:
             TODO: Document all possible errors
         """
 	try:
-                client = MailchimpMarketing.Client()
-                client.set_config(self.keys)
+                self._client.set_config(self.keys)
                 response = client.fileManager.create_folder({"name": foldername})
                 return response["id"]
-        except ApiClientError as error:
-                print("Error: {}".format(error.text))
+        except ApiClienError:
+   		raise ApiClientError 
     
     def upload_certificates(self, attendees: AttendeeManager,
                             folder_id: int = None,
@@ -123,7 +125,38 @@ class MailchimpManager:
         Raises:
             TODO: Document potential errors.
         """
-        raise NotImplementedError
+	from mailchimp_marketing import Client
+        
+        mailchimp = Client()
+        mailchimp.set_config(self._keys)
+
+        folder_id = self._folder_id
+
+
+        operations = []
+        for attendee in attendees:
+                pdf_file = attendee.get_file()
+                with open(pdf_file, "rb") as pdf_file:
+                        self._base64_file = base64.b64encode(pdf_file.read())
+                operation = {
+                        "method": "POST",
+                        "path": f"/file-manager/files",
+                        "operation_id": str(attendee.get_id()),  #if there is an attribute to the attendee object for an id or else a name
+                        "body":({
+                                "name"  : attendee.get_Fname() + '.pdf',
+                                "file_data": self._bas64_file
+                                "folder_id": self._folder_id
+                                })
+                        }
+                operations.append(operation)
+
+        payload = {
+                "operations": operations
+        }
+        response = mailchimp.batches.start(payload)
+        batch_id = response['id']
+        response_batch = mailchimp.batches.status(batch_id)
+        print(response_batch['response_body_url'])
 
     def update_contact_files(self, attendees: AttendeeManager,
                              status_func: StatusFunc = None) -> str:
