@@ -169,7 +169,12 @@ class MailchimpManager:
                     }
         response = mailchimp.batches.start(payload)
         batch_id = response['id']
-        response_batch = mailchimp.batches.status(batch_id)
+        finished = False
+        while finished == False:
+            response_batch = mailchimp.batches.status(batch_id)
+            if response_batch['status'] == 'finished':
+                finished = True
+
         response_url = response_batch['response_body_url']
         return response_url
         
