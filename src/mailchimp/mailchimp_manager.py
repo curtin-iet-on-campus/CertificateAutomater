@@ -66,14 +66,20 @@ class MailchimpManager:
 		raise ValueError
 	if "api_key" or "access_token" not in keys:
 		raise ValueError
-	for value in keys.values():
+	if len(keys) != 2:
+        raise ValueError
+    for value in keys.values():
 		if type(value) != str:
 			raise TypeError
 		if value == "":
 			raise ValueError
-	return True
-		
-		    
+    health_status = {"health_status": "Everything's Chimpy!"}
+    if ping() == health_status:
+        authorisation = True
+    else:
+        authorisation = False
+    return authorisation
+  
     def ping(self) ->
         """
         Ping Mailchimp server to check for connection and authroisation.
@@ -85,11 +91,11 @@ class MailchimpManager:
             TODO: Detail potential errors
         """
         try:
-                self._client.set_config(self.keys)
-                response = client.ping.get()
-                return response
+            self._client.set_config(self.keys)
+            response = client.ping.get()
+            return response
         except ApiClietError:
-		raise ApiClientError
+    		raise ApiClientError
  
     def create_folder(self, foldername: str) -> int:
         """
@@ -107,11 +113,11 @@ class MailchimpManager:
             TODO: Document all possible errors
         """
 	try:
-                self._client.set_config(self.keys)
-                response = client.fileManager.create_folder({"name": foldername})
-                return response["id"]
-        except ApiClienError:
-   		raise ApiClientError 
+        self._client.set_config(self.keys)
+        response = client.fileManager.create_folder({"name": foldername})
+        return response["id"]
+    except ApiClienError:
+        raise ApiClientError 
     
     def upload_certificates(self, attendees: AttendeeManager,
                             folder_id: int = None,
@@ -143,20 +149,20 @@ class MailchimpManager:
 
         operations = []
         for attendee in attendees:
-                pdf_file = attendee.get_file()
-                with open(pdf_file, "rb") as pdf_file:
-                        self._base64_file = base64.b64encode(pdf_file.read())
-                operation = {
-                        "method": "POST",
-                        "path": f"/file-manager/files",
-                        "operation_id": str(attendee.get_id()),  #if there is an attribute to the attendee object for an id or else a name
-                        "body":({
-                                "name"  : attendee.get_Fname() + '.pdf',
-                                "file_data": self._bas64_file
-                                "folder_id": self._folder_id
-                                })
+            pdf_file = attendee.get_file()
+            with open(pdf_file, "rb") as pdf_file:
+                self._base64_file = base64.b64encode(pdf_file.read())
+            operation = {
+                    "method": "POST",
+                    "path": f"/file-manager/files",
+                    "operation_id": str(attendee.get_id()),  #if there is an attribute to the attendee object for an id or else a name
+                    "body":({
+                        "name"  : attendee.get_Fname() + '.pdf',
+                        "file_data": self._bas64_file
+                        "folder_id": self._folder_id
+                            })
                         }
-                operations.append(operation)
+            operations.append(operation)
 
         payload = {
                 "operations": operations
