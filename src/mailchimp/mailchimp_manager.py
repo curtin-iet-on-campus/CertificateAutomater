@@ -14,12 +14,13 @@ import os.path
 
 import base64
 
+from typing import *
+
 import mailchimp_marketing as MailchimpMarketing
 
 from mailchimp_marketing.api_client import ApiClientError
 
 from __future__ import annotations
-from typing import *
 
 from requests import *
 
