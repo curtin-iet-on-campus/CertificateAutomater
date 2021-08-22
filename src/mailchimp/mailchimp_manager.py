@@ -146,7 +146,7 @@ class MailchimpManager:
         mailchimp.set_config(self.keys)
         operations = []
         for attendee in attendees:
-            pdf_file = attendee.file_path()
+            pdf_file = attendee.file_path
             with open(pdf_file, "rb") as pdf_file:
                 base64_file = base64.b64encode(pdf_file.read())
             operation = {
