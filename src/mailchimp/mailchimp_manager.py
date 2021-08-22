@@ -41,7 +41,7 @@ class MailchimpManager:
     """
 	
     def __init__(self):
- 	self._client = MailchimpMarketing.Client()
+ 	self.client = MailchimpMarketing.Client()
   	
     def set_authorisation(self, keys: Dict[str, str]) -> bool:
         """
@@ -80,7 +80,7 @@ class MailchimpManager:
         authorisation = False
     return authorisation
   
-    def ping(self) ->
+    def ping(self) -> dict:
         """
         Ping Mailchimp server to check for connection and authroisation.
 
@@ -113,10 +113,10 @@ class MailchimpManager:
             TODO: Document all possible errors
         """
 	try:
-        self._client.set_config(self.keys)
+        self.client.set_config(self.keys)
         response = client.fileManager.create_folder({"name": foldername})
         return response["id"]
-    except ApiClienError:
+    except ApiClientError:
         raise ApiClientError 
     
     def upload_certificates(self, attendees: AttendeeManager,
@@ -140,19 +140,16 @@ class MailchimpManager:
             TODO: Document potential errors.
         """
 	from mailchimp_marketing import Client
-        
-        mailchimp = Client()
-        mailchimp.set_config(self._keys)
-
-        folder_id = self._folder_id
-
-
-        operations = []
-        for attendee in attendees:
-            pdf_file = attendee.get_file()
-            with open(pdf_file, "rb") as pdf_file:
-                self._base64_file = base64.b64encode(pdf_file.read())
-            operation = {
+        try:
+            mailchimp = Client()
+            mailchimp.set_config(self._keys)
+            folder_id = self._folder_id
+            operations = []
+            for attendee in attendees:
+                pdf_file = attendee.get_file()
+                with open(pdf_file, "rb") as pdf_file:
+                    self._base64_file = base64.b64encode(pdf_file.read())
+                operation = {
                     "method": "POST",
                     "path": f"/file-manager/files",
                     "operation_id": str(attendee.get_id()),  #if there is an attribute to the attendee object for an id or else a name
@@ -162,16 +159,18 @@ class MailchimpManager:
                         "folder_id": self._folder_id
                             })
                         }
-            operations.append(operation)
+                operations.append(operation)
 
-        payload = {
-                "operations": operations
-        }
-        response = mailchimp.batches.start(payload)
-        batch_id = response['id']
-        response_batch = mailchimp.batches.status(batch_id)
-        print(response_batch['response_body_url'])
-
+            payload = {
+                    "operations": operations
+                        }
+            response = mailchimp.batches.start(payload)
+            batch_id = response['id']
+            response_batch = mailchimp.batches.status(batch_id)
+            print(response_batch['response_body_url'])
+        except ApiClientError:
+            raise ApiClientError   
+        
     def update_contact_files(self, attendees: AttendeeManager,
                              status_func: BatchStatusFunc = None) -> str:
         """
