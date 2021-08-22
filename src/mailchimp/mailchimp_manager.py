@@ -23,6 +23,8 @@ from requests import *
 
 from src.attendees.attendee_manager import Attendee, AttendeeManager
 
+from mailchimp_marketing import Client
+
 BatchStatusFunc = Callable[[str, int, int], None]
 """Type alias for batch status update callback.
 
@@ -41,7 +43,7 @@ class MailchimpManager:
     """
 	
     def __init__(self):
- 	self.client = MailchimpMarketing.Client()
+     	self.client = MailchimpMarketing.Client()
   	
     def set_authorisation(self, keys: Dict[str, str]) -> bool:
         """
@@ -60,25 +62,26 @@ class MailchimpManager:
         Raises:
             TODO: Document all possible errors
         """
-	if type(keys) != dict:
-		raise TypeError
-	if "server" not in keys:
-		raise ValueError
-	if "api_key" or "access_token" not in keys:
-		raise ValueError
-	if len(keys) != 2:
-        raise ValueError
-    for value in keys.values():
-		if type(value) != str:
-			raise TypeError
-		if value == "":
-			raise ValueError
-    health_status = {"health_status": "Everything's Chimpy!"}
-    if ping() == health_status:
-        authorisation = True
-    else:
-        authorisation = False
-    return authorisation
+        if type(keys) != dict:
+		    raise TypeError
+    	if "server" not in keys:
+	    	raise ValueError
+	    if "api_key" or "access_token" not in keys:
+		    raise ValueError
+	    if len(keys) != 2:
+            raise ValueError
+        for value in keys.values():
+		    if type(value) != str:
+			    raise TypeError
+	    	elif value == "":
+		    	raise ValueError
+        self.keys = keys
+        health_status = {"health_status": "Everything's Chimpy!"}
+        if ping() == health_status:
+            authorisation = True
+        else:
+            authorisation = False
+        return authorisation
   
     def ping(self) -> dict:
         """
@@ -90,12 +93,9 @@ class MailchimpManager:
         Raises:
             TODO: Detail potential errors
         """
-        try:
-            self._client.set_config(self.keys)
-            response = client.ping.get()
-            return response
-        except ApiClietError:
-    		raise ApiClientError
+        self._client.set_config(self.keys)
+        response = client.ping.get()
+        return response
  
     def create_folder(self, foldername: str) -> int:
         """
@@ -112,12 +112,15 @@ class MailchimpManager:
         Raises:
             TODO: Document all possible errors
         """
-	try:
+        if type(foldername) != str:
+            raise ValueError
+        elif foldername = "":
+            raise ValueError
+        elif len(foldername) <= 4:
+            raise ValueError
         self.client.set_config(self.keys)
         response = client.fileManager.create_folder({"name": foldername})
         return response["id"]
-    except ApiClientError:
-        raise ApiClientError 
     
     def upload_certificates(self, attendees: AttendeeManager,
                             folder_id: int = None,
@@ -139,37 +142,32 @@ class MailchimpManager:
         Raises:
             TODO: Document potential errors.
         """
-	from mailchimp_marketing import Client
-        try:
-            mailchimp = Client()
-            mailchimp.set_config(self._keys)
-            folder_id = self._folder_id
-            operations = []
-            for attendee in attendees:
-                pdf_file = attendee.get_file()
-                with open(pdf_file, "rb") as pdf_file:
-                    self._base64_file = base64.b64encode(pdf_file.read())
-                operation = {
-                    "method": "POST",
-                    "path": f"/file-manager/files",
-                    "operation_id": str(attendee.get_id()),  #if there is an attribute to the attendee object for an id or else a name
-                    "body":({
-                        "name"  : attendee.get_Fname() + '.pdf',
-                        "file_data": self._bas64_file
-                        "folder_id": self._folder_id
-                            })
-                        }
-                operations.append(operation)
+        mailchimp = Client()
+        mailchimp.set_config(self.keys)
+        operations = []
+        for attendee in attendees:
+            pdf_file = attendee.file_path()
+            with open(pdf_file, "rb") as pdf_file:
+                base64_file = base64.b64encode(pdf_file.read())
+            operation = {
+                "method": "POST",
+                "path": f"/file-manager/files",
+                "operation_id": str(attendee.get_id()),  #if there is an attribute to the attendee object for an id or else a name
+                "body":({
+                    "name"  : attendee.get_Fname() + '.pdf',
+                    "file_data": base64_file
+                    "folder_id": folder_id
+                        })
+                    }
+            operations.append(operation)
 
-            payload = {
-                    "operations": operations
-                        }
-            response = mailchimp.batches.start(payload)
-            batch_id = response['id']
-            response_batch = mailchimp.batches.status(batch_id)
-            print(response_batch['response_body_url'])
-        except ApiClientError:
-            raise ApiClientError   
+        payload = {
+                "operations": operations
+                    }
+        response = mailchimp.batches.start(payload)
+        batch_id = response['id']
+        response_batch = mailchimp.batches.status(batch_id)
+        print(response_batch['response_body_url'])
         
     def update_contact_files(self, attendees: AttendeeManager,
                              status_func: BatchStatusFunc = None) -> str:
