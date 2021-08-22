@@ -169,7 +169,8 @@ class MailchimpManager:
         response = mailchimp.batches.start(payload)
         batch_id = response['id']
         response_batch = mailchimp.batches.status(batch_id)
-        print(response_batch['response_body_url'])
+        response_url = response_batch['response_body_url']
+        return response_url
         
     def update_contact_files(self, attendees: AttendeeManager,
                              status_func: BatchStatusFunc = None) -> str:
