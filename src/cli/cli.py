@@ -16,12 +16,12 @@ from src.attendees.attendee_converter import *
 from src.certificate_creator.certificate_maker import createCertificate
 from src.mailchimp.mailchimp_manager import MailchimpManager
 
-def run_cli(argv: Dict[str, Any]):
+def run_cli(argv: Dict[str, str]):
     """
     Runs the CLI.
 
     Args:
-        argv (Dict[str, Any]): The processed command line arguments.
+        argv (Dict[str, str]): The processed command line arguments.
     """
     raise NotImplementedError
 

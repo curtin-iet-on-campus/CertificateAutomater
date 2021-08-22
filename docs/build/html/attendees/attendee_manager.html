@@ -199,6 +199,12 @@ Attendees must be Attendee objects for ease of use.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="attendee_manager.AttendeeManager.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/attendee_manager.html#AttendeeManager.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#attendee_manager.AttendeeManager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="attendee_manager.AttendeeManager.add_attendee">
 <span class="sig-name descname"><span class="pre">add_attendee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attendee</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">src.attendees.attendee.Attendee</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attendee_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Hashable</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/attendee_manager.html#AttendeeManager.add_attendee"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#attendee_manager.AttendeeManager.add_attendee" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an attendee.</p>
@@ -214,28 +220,6 @@ Attendees must be Attendee objects for ease of use.</p>
 <li><p><strong>TypeError</strong> – if attendee is not an Attendee object.</p></li>
 <li><p><strong>TypeError</strong> – if attendee_id is not hashable.</p></li>
 <li><p><strong>ValueError</strong> – if an attendee with attendee_id already exists.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="attendee_manager.AttendeeManager.add_attribute">
-<span class="sig-name descname"><span class="pre">add_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Hashable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/attendee_manager.html#AttendeeManager.add_attribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#attendee_manager.AttendeeManager.add_attribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an attribute for all attendees.</p>
-<p>Useful for adding attribute for all attendees in one line of code.
-Will overwrite values if attribute already exists.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> (<em>Hashable</em>) – The key/name of the attribute.</p></li>
-<li><p><strong>values</strong> (<em>Dict</em><em>[</em><em>Hashable</em><em>, </em><em>Any</em><em>]</em>) – A mapping from attendee ID to initial value of the new attribute. Defaults to empty dictionary (no initialision).</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>TypeError</strong> – if key is not Hashable.</p></li>
-<li><p><strong>TypeError</strong> – if values is not a dictionary.</p></li>
 </ul>
 </dd>
 </dl>
@@ -272,6 +256,28 @@ Will overwrite values if attribute already exists.</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>KeyError</strong> – if attendee does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="attendee_manager.AttendeeManager.add_attribute">
+<span class="sig-name descname"><span class="pre">add_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Hashable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/attendee_manager.html#AttendeeManager.add_attribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#attendee_manager.AttendeeManager.add_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an attribute for all attendees.</p>
+<p>Useful for adding attribute for all attendees in one line of code.
+Will overwrite values if attribute already exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>Hashable</em>) – The key/name of the attribute.</p></li>
+<li><p><strong>values</strong> (<em>Dict</em><em>[</em><em>Hashable</em><em>, </em><em>Any</em><em>]</em>) – A mapping from attendee ID to initial value of the new attribute. Defaults to empty dictionary (no initialision).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>TypeError</strong> – if key is not Hashable.</p></li>
+<li><p><strong>TypeError</strong> – if values is not a dictionary.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

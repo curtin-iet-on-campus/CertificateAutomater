@@ -33,7 +33,7 @@ class ComplexNumber:
            imag (int): The imaginary part of complex number (default 0.0).
         
         Raises:
-            TypeError if real or imag are not floats or ints
+            TypeError: if real or imag are not floats or ints
         """
         if type(real) not in [float, int]:
             raise TypeError("real part must be a float or int")
@@ -61,7 +61,7 @@ class ComplexNumber:
             ComplexNumber: A complex number which contains the sum.
         
         Raises:
-            TypeError if num is not a ComplexNumber
+            TypeError: if num is not a ComplexNumber
         """
         if not isinstance(num, ComplexNumber):
             raise TypeError("num must be a ComplexNumber")

@@ -16,13 +16,21 @@ import mailchimp_marketing as MailchimpMarketing
 
 from mailchimp_marketing.api_client import ApiClientError
 
+from __future__ import annotations
 from typing import *
 
 from requests import *
 
 from src.attendees.attendee_manager import Attendee, AttendeeManager
 
-StatusFunc = Callable[[Attendee, Exception], None]
+BatchStatusFunc = Callable[[str, int, int], None]
+"""Type alias for batch status update callback.
+
+Args:
+    status (str): The status of the batch request.
+    successful (int): Number of successful requests.
+    failed (int): Number of failed requests.
+"""
 
 class MailchimpManager:
     """
@@ -107,7 +115,7 @@ class MailchimpManager:
     
     def upload_certificates(self, attendees: AttendeeManager,
                             folder_id: int = None,
-                            status_func: StatusFunc = None
+                            status_func: BatchStatusFunc = None
                             ) -> str:
         """
         Upload certificates to Mailchimp.
@@ -117,7 +125,7 @@ class MailchimpManager:
         Args:
             attendees (AttendeeManager): The collection of attendees. Will be updated to include file URLs.
             folder_id (int): The ID of the folder to upload certificates to. If left as ``None``, will not put in a folder.
-            status_func (Callable[[Attendee, Exception], None]): Status update callback to inform caller of what certificates have been processed. Must take in ``Attendee`` object then the ``Exception``. ``Exception`` should be ``None`` if successful. If left as ``None``, does nothing.
+            status_func (BatchStatusFunc): Status update callback to inform caller of what certificates have been processed. Must take in status (string), then number of successes, followed by number failed. If left as ``None``, does nothing.
         
         Returns:
             str: The response_body_url to download the responses.
@@ -159,7 +167,7 @@ class MailchimpManager:
         print(response_batch['response_body_url'])
 
     def update_contact_files(self, attendees: AttendeeManager,
-                             status_func: StatusFunc = None) -> str:
+                             status_func: BatchStatusFunc = None) -> str:
         """
         Updates the attendee contact file field.
 
@@ -167,7 +175,7 @@ class MailchimpManager:
 
         Args:
             attendees (AttendeeManager): The collection of attendees with file URLs.
-            status_func (StatusFunc): Callback to inform caller of progress, must pass in ``Attendee`` object then the ``Exception`` (``None`` if no error occured), then return nothing.
+            status_func (BatchStatusFunc): Callback to inform caller of progress, must take in status (string), then number of successes, then number failed. If ``None``, does nothing.
 
         Returns:
             str: The response_body_url to download the responses.

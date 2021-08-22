@@ -891,11 +891,30 @@ In Python, docstrings attempt to solve this issue via simple triple quote commen
 
 \inputminted[linenos=true]{python}{python_examples/docstring.py}
 
+\subsection{Sphinx documentation}
+
+Even given detailed and appropriate internal documentation, navigating a source code file system is a time consuming and frustrating process. Often, developers will go around in circles reading the same files over and over again to try and reverse engineer source code. This is an inevitable consequence of complex programs, as code must be organised in a file system to remain organised. However, this organisation will only make inituitive sense to those who made it.
+
+Software engineers have long since known this problem, inventing various documentation generators. Easily the most popular for Python is the Sphinx generator. Sphinx uses the docstrings within source code to automatically generate reStructedText files, identifiable with the \texttt{.rst} file extension. These reStructedText files can then be used to generate HTML files, allowing for ease of navigating internal documentation with tables of contents, a search engine, and hyperlinks. Furthermore, Sphinx has various HTML themes, both first and third-party, for various aesthetic preferances.
+
+To use Sphinx, a few simple steps must be followed. First, the docstrings must be written for all public constants, classes, methods, and functions. These docstrings must either be writtin in the Sphinx, Google, or NumPy format (the latter two require the \mintinline{python}{napoleon} extension). Next, Sphinx must be installed via \mintinline{shell}{pip install sphinx}. After, the command \mintinline{shell}{sphinx-quickstart} can be run to automate most of the \texttt{conf.py} file, which is the settings file for Sphinx when generating documentation.\footnote{It is strongly recommend to run this command in a \texttt{docs/} folder} Then, the reStructedText files can be generated via
+\mint[linenos=false, frame=none]{shell}|sphinx-apidoc -o . ../src|
+
+\noindent
+Note that the \mintinline{shell}{-o .} tells Sphinx to create the files in the current working directory (e.g. \mintinline{shell}{docs/}), and \mintinline{shell}{../src} tells Sphinx where to look for source code files. Finally, running \mintinline{shell}{make html} tells Sphinx to use the reStructedText files to generate HTML files.
+
+If the docstrings are updated, then the command \mintinline{shell}{make html} can be rerun to update the HTML files. Fortunately, the reStructedText files refer to the docstrings instead of copying them, meaning they do not need to be recreated. For Mac and Linux users, the Makefile program should already be installed. For Windows users, Makefile can be installed via installing Chocolatey first, then running \mintinline{shell}{choco install make}.
+
 \subsection{Further reading}
 
 \begin{itemize}
     \item Official Python code style guide: \url{https://www.python.org/dev/peps/pep-0008/}
     \item Google docstring example: \url{https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html}
+    \item Sphinx official website: \url{https://www.sphinx-doc.org/en/master/}
+    \item Idiot's guide to Sphinx: \url{https://samnicholls.net/2016/06/15/how-to-sphinx-readthedocs/}
+    \item Official Sphinx HTML themes: \url{https://www.sphinx-doc.org/en/master/usage/theming.html}
+    \item Unofficial Sphinx HTML themes: \url{https://sphinx-themes.org/}
+    \item Installing Chocolatey: \url{https://chocolatey.org/install}
 \end{itemize}
 
 \newpage

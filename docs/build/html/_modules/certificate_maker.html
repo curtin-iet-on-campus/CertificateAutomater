@@ -178,13 +178,32 @@
 <span class="sd">    * Research other options for certificates besides PDF files.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="kn">from</span> <span class="nn">src.attendees.attendee_manager</span> <span class="kn">import</span> <span class="n">Attendee</span><span class="p">,</span> <span class="n">AttendeeManager</span>
 
+<span class="n">NamingFunc</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Attendee</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span>
+<span class="sd">&quot;&quot;&quot;Alias for naming function.</span>
+
+<span class="sd">Args:</span>
+<span class="sd">    attendee (Attendee): The attendee to base the name from.</span>
+
+<span class="sd">Return:</span>
+<span class="sd">    str: The generated name.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">CertStatusFunc</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Attendee</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
+<span class="sd">&quot;&quot;&quot;Alias for certificate status function.</span>
+
+<span class="sd">Args:</span>
+<span class="sd">    attendee (Attendee): The attendee whose certificate has been processed.</span>
+<span class="sd">    err (Exception): The error that occurred. ``None`` if successful.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="createCertificate"><a class="viewcode-back" href="../certificate_maker.html#certificate_maker.createCertificate">[docs]</a><span class="k">def</span> <span class="nf">createCertificate</span><span class="p">(</span><span class="n">in_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attendees</span><span class="p">:</span> <span class="n">AttendeeManager</span><span class="p">,</span>
-                     <span class="n">namingFunc</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Attendee</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                     <span class="n">statusFunc</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Attendee</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">namingFunc</span><span class="p">:</span> <span class="n">NamingFunc</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">statusFunc</span><span class="p">:</span> <span class="n">CertStatusFunc</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                      <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AttendeeManager</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates and saves certificates given template and the attendee record.</span>
@@ -193,12 +212,12 @@
 <span class="sd">        in_path (str): The path to the template document.</span>
 <span class="sd">        out_dir (str): The folder to save the certificate to.</span>
 <span class="sd">        attendees (AttendeeManager): The collection of attendees.</span>
-<span class="sd">        namingFunc (Callable[[Attendee], str]): What to name the certificate, excluding the file extension. Defaults to ``None``, meaning certificates are automatically named.</span>
-<span class="sd">        statusFunc (Callable[[Attendee, bool], None]): Status update function to inform caller of what certificates have been made. Must take in ``Attendee`` object and whether it was successfully created (bool). Useful for user interfaces. If left as ``None``, does nothing.</span>
-<span class="sd">        overwrite (bool): Whether to overwrite certificate file that already exist, defaults to ``True``. Should call statusFunc with ``FileExistsError`` if False.</span>
+<span class="sd">        namingFunc (NamingFunc): What to name the certificate, excluding the file extension. Defaults to ``None``, meaning certificates are automatically named.</span>
+<span class="sd">        statusFunc (CertStatusFunc): Status update function to inform caller of what certificates have been made. Must take in ``Attendee`` object, then the error or ``None`` if no error occurred. Defaults to ``None``, meaning no reporting is done.</span>
+<span class="sd">        overwrite (bool): Whether to overwrite certificate file that already exist, defaults to ``True``. Should call ``statusFunc`` with ``FileExistsError`` if ``False``.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        Updated attendees with &quot;cert_path&quot; field. Should map to ``None`` if failed</span>
+<span class="sd">        Updated attendees with ``&quot;cert_path&quot;`` field. Should map to ``None`` if failed</span>
 <span class="sd">        to create certificate.</span>
 
 <span class="sd">    Raises:</span>

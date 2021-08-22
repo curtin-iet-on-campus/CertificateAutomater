@@ -179,6 +179,22 @@ However, does not have ability to authorise itself. Must get keys elsewhere.</p>
 <li><p>Implement datalogging</p></li>
 </ul>
 </div>
+<dl class="py data">
+<dt class="sig sig-object py" id="mailchimp_manager.BatchStatusFunc">
+<span class="sig-prename descclassname"><span class="pre">mailchimp_manager.</span></span><span class="sig-name descname"><span class="pre">BatchStatusFunc</span></span><a class="headerlink" href="#mailchimp_manager.BatchStatusFunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type alias for batch status update callback.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>status</strong> (<em>str</em>) – The status of the batch request.</p></li>
+<li><p><strong>successful</strong> (<em>int</em>) – Number of successful requests.</p></li>
+<li><p><strong>failed</strong> (<em>int</em>) – Number of failed requests.</p></li>
+</ul>
+</dd>
+</dl>
+<p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>], <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]</p>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="mailchimp_manager.MailchimpManager">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">mailchimp_manager.</span></span><span class="sig-name descname"><span class="pre">MailchimpManager</span></span><a class="reference internal" href="_modules/mailchimp_manager.html#MailchimpManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mailchimp_manager.MailchimpManager" title="Permalink to this definition">¶</a></dt>
@@ -191,63 +207,9 @@ However, does not have ability to authorise itself. Must get keys elsewhere.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mailchimp_manager.MailchimpManager.create_folder">
-<span class="sig-name descname"><span class="pre">create_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">foldername</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/mailchimp_manager.html#MailchimpManager.create_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mailchimp_manager.MailchimpManager.create_folder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates folder on user’s Mailchimp account.</p>
-<p>Blocking function that makes HTTP request to create folder.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>foldername</strong> (<em>str</em>) – The name of the folder to create.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the folder ID given by Mailchimp.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>TODO</strong> – Document all possible errors</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mailchimp_manager.MailchimpManager.download_batch_respones">
-<span class="sig-name descname"><span class="pre">download_batch_respones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_body_url</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_files</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mailchimp_manager.html#MailchimpManager.download_batch_respones"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mailchimp_manager.MailchimpManager.download_batch_respones" title="Permalink to this definition">¶</a></dt>
-<dd><p>Downloads batch request repsonses.</p>
-<p>Blocking function that will wait until file is downloaded, unzipped,
-then processed.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>response_body_url</strong> (<em>str</em>) – The URL to download the responses.</p></li>
-<li><p><strong>keep_files</strong> (<em>bool</em>) – Whether to keep the responses on file or delete them, defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The list of responses as JSON strings.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[str]</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>TODO</strong> – Document potential errors.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mailchimp_manager.MailchimpManager.ping">
-<span class="sig-name descname"><span class="pre">ping</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">requests.models.Response</span></span></span><a class="reference internal" href="_modules/mailchimp_manager.html#MailchimpManager.ping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mailchimp_manager.MailchimpManager.ping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ping Mailchimp server to check for connection and authroisation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The response from the Mailchimp server.</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>TODO</strong> – Detail potential errors</p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="mailchimp_manager.MailchimpManager.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mailchimp_manager.html#MailchimpManager.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mailchimp_manager.MailchimpManager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
 </dd></dl>
 
 <dl class="py method">
@@ -274,15 +236,51 @@ API documentation for more details.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mailchimp_manager.MailchimpManager.update_contact_files">
-<span class="sig-name descname"><span class="pre">update_contact_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attendees</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">src.attendees.attendee_manager.AttendeeManager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status_func</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">src.attendees.attendee.Attendee</span><span class="p"><span class="pre">,</span> </span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/mailchimp_manager.html#MailchimpManager.update_contact_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mailchimp_manager.MailchimpManager.update_contact_files" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates the attendee contact file field.</p>
-<p>Blocking function that waits for batch request to complete.</p>
+<dt class="sig sig-object py" id="mailchimp_manager.MailchimpManager.ping">
+<span class="sig-name descname"><span class="pre">ping</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">requests.models.Response</span></span></span><a class="reference internal" href="_modules/mailchimp_manager.html#MailchimpManager.ping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mailchimp_manager.MailchimpManager.ping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ping Mailchimp server to check for connection and authroisation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The response from the Mailchimp server.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TODO</strong> – Detail potential errors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mailchimp_manager.MailchimpManager.create_folder">
+<span class="sig-name descname"><span class="pre">create_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">foldername</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/mailchimp_manager.html#MailchimpManager.create_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mailchimp_manager.MailchimpManager.create_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates folder on user’s Mailchimp account.</p>
+<p>Blocking function that makes HTTP request to create folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>foldername</strong> (<em>str</em>) – The name of the folder to create.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the folder ID given by Mailchimp.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TODO</strong> – Document all possible errors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mailchimp_manager.MailchimpManager.upload_certificates">
+<span class="sig-name descname"><span class="pre">upload_certificates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attendees</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">AttendeeManager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status_func</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#mailchimp_manager.BatchStatusFunc" title="mailchimp_manager.BatchStatusFunc"><span class="pre">BatchStatusFunc</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/mailchimp_manager.html#MailchimpManager.upload_certificates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mailchimp_manager.MailchimpManager.upload_certificates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload certificates to Mailchimp.</p>
+<p>Blocking function that waits until the batch request completes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>attendees</strong> (<a class="reference internal" href="attendees/attendee_manager.html#attendee_manager.AttendeeManager" title="attendee_manager.AttendeeManager"><em>AttendeeManager</em></a>) – The collection of attendees with file URLs.</p></li>
-<li><p><strong>status_func</strong> (<em>StatusFunc</em>) – Callback to inform caller of progress, must pass in <code class="docutils literal notranslate"><span class="pre">Attendee</span></code> object then the <code class="docutils literal notranslate"><span class="pre">Exception</span></code> (<code class="docutils literal notranslate"><span class="pre">None</span></code> if no error occured), then return nothing.</p></li>
+<li><p><strong>attendees</strong> (<a class="reference internal" href="attendees/attendee_manager.html#attendee_manager.AttendeeManager" title="attendee_manager.AttendeeManager"><em>AttendeeManager</em></a>) – The collection of attendees. Will be updated to include file URLs.</p></li>
+<li><p><strong>folder_id</strong> (<em>int</em>) – The ID of the folder to upload certificates to. If left as <code class="docutils literal notranslate"><span class="pre">None</span></code>, will not put in a folder.</p></li>
+<li><p><strong>status_func</strong> (<em>BatchStatusFunc</em>) – Status update callback to inform caller of what certificates have been processed. Must take in status (string), then number of successes, followed by number failed. If left as <code class="docutils literal notranslate"><span class="pre">None</span></code>, does nothing.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -298,16 +296,15 @@ API documentation for more details.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mailchimp_manager.MailchimpManager.upload_certificates">
-<span class="sig-name descname"><span class="pre">upload_certificates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attendees</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">src.attendees.attendee_manager.AttendeeManager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status_func</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">src.attendees.attendee.Attendee</span><span class="p"><span class="pre">,</span> </span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/mailchimp_manager.html#MailchimpManager.upload_certificates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mailchimp_manager.MailchimpManager.upload_certificates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Upload certificates to Mailchimp.</p>
-<p>Blocking function that waits until the batch request completes.</p>
+<dt class="sig sig-object py" id="mailchimp_manager.MailchimpManager.update_contact_files">
+<span class="sig-name descname"><span class="pre">update_contact_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attendees</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">AttendeeManager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status_func</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#mailchimp_manager.BatchStatusFunc" title="mailchimp_manager.BatchStatusFunc"><span class="pre">BatchStatusFunc</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/mailchimp_manager.html#MailchimpManager.update_contact_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mailchimp_manager.MailchimpManager.update_contact_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the attendee contact file field.</p>
+<p>Blocking function that waits for batch request to complete.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>attendees</strong> (<a class="reference internal" href="attendees/attendee_manager.html#attendee_manager.AttendeeManager" title="attendee_manager.AttendeeManager"><em>AttendeeManager</em></a>) – The collection of attendees. Will be updated to include file URLs.</p></li>
-<li><p><strong>folder_id</strong> (<em>int</em>) – The ID of the folder to upload certificates to. If left as <code class="docutils literal notranslate"><span class="pre">None</span></code>, will not put in a folder.</p></li>
-<li><p><strong>status_func</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="attendees/attendee.html#attendee.Attendee" title="attendee.Attendee"><em>Attendee</em></a><em>, </em><em>Exception</em><em>]</em><em>, </em><em>None</em><em>]</em>) – Status update callback to inform caller of what certificates have been processed. Must take in <code class="docutils literal notranslate"><span class="pre">Attendee</span></code> object then the <code class="docutils literal notranslate"><span class="pre">Exception</span></code>. <code class="docutils literal notranslate"><span class="pre">Exception</span></code> should be <code class="docutils literal notranslate"><span class="pre">None</span></code> if successful. If left as <code class="docutils literal notranslate"><span class="pre">None</span></code>, does nothing.</p></li>
+<li><p><strong>attendees</strong> (<a class="reference internal" href="attendees/attendee_manager.html#attendee_manager.AttendeeManager" title="attendee_manager.AttendeeManager"><em>AttendeeManager</em></a>) – The collection of attendees with file URLs.</p></li>
+<li><p><strong>status_func</strong> (<em>BatchStatusFunc</em>) – Callback to inform caller of progress, must take in status (string), then number of successes, then number failed. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, does nothing.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -315,6 +312,31 @@ API documentation for more details.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TODO</strong> – Document potential errors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mailchimp_manager.MailchimpManager.download_batch_respones">
+<span class="sig-name descname"><span class="pre">download_batch_respones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_body_url</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_files</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mailchimp_manager.html#MailchimpManager.download_batch_respones"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mailchimp_manager.MailchimpManager.download_batch_respones" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads batch request repsonses.</p>
+<p>Blocking function that will wait until file is downloaded, unzipped,
+then processed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>response_body_url</strong> (<em>str</em>) – The URL to download the responses.</p></li>
+<li><p><strong>keep_files</strong> (<em>bool</em>) – Whether to keep the responses on file or delete them, defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The list of responses as JSON strings.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[str]</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>TODO</strong> – Document potential errors.</p>
