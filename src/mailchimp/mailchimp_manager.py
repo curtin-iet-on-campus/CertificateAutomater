@@ -10,6 +10,8 @@ TODO:
 """
 import json
 
+import os.path
+
 import base64
 
 import mailchimp_marketing as MailchimpMarketing
@@ -154,7 +156,7 @@ class MailchimpManager:
                 "path": f"/file-manager/files",
                 "operation_id": str(attendee.email),  #if there is an attribute to the attendee object for an id or else a name
                 "body":json.dumps({
-                    "name"  : attendee.get_Fname() + '.pdf',
+                    "name"  : os.path.basename(pdf_file), #returns a string with the base name of the file path
                     "file_data": base64_file
                     "folder_id": folder_id
                         })
