@@ -153,7 +153,7 @@ class MailchimpManager:
                 "method": "POST",
                 "path": f"/file-manager/files",
                 "operation_id": str(attendee.email),  #if there is an attribute to the attendee object for an id or else a name
-                "body":({
+                "body":json.dumps({
                     "name"  : attendee.get_Fname() + '.pdf',
                     "file_data": base64_file
                     "folder_id": folder_id
