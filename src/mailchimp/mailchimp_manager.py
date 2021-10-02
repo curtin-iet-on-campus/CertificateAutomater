@@ -46,7 +46,7 @@ class MailchimpManager:
     """
 	
     def __init__(self):
-     	self.client = MailchimpMarketing.Client()
+     	self._client = Client() #MailchimpMarketing.Client() is unnecessary as it has been imported from mailchimp_marketing
   	
     def set_authorisation(self, keys: Dict[str, str]) -> bool:
         """
@@ -66,27 +66,27 @@ class MailchimpManager:
             TODO: Document all possible errors
         """
         if type(keys) != dict:
-		    raise TypeError
-    	if "server" not in keys:
-	    	raise ValueError
-	    if "api_key" or "access_token" not in keys:
-		    raise ValueError
-	    if len(keys) != 2:
+            raise TypeError
+        if "server" not in keys:
+	        raise ValueError
+        if "api_key" or "access_token" not in keys:
+	        raise ValueError
+        if len(keys) != 2:
             raise ValueError
         for value in keys.values():
-		    if type(value) != str:
-			    raise TypeError
-	    	elif value == "":
-		    	raise ValueError
-        self.keys = keys
+            if type(value) != str:
+                raise TypeError
+            elif value == "":
+                raise ValueError
+        self._client.set_config(keys) # setting th econfigurations just once then this line will not be repeated in any fucntions
         health_status = {"health_status": "Everything's Chimpy!"}
-        if ping() == health_status:
+        if self.ping() == health_status:
             authorisation = True
         else:
             authorisation = False
         return authorisation
   
-    def ping(self) -> dict:
+    def ping(self):
         """
         Ping Mailchimp server to check for connection and authroisation.
 
@@ -96,9 +96,11 @@ class MailchimpManager:
         Raises:
             TODO: Detail potential errors
         """
-        self._client.set_config(self.keys)
-        response = client.ping.get()
-        return response
+        try:
+            response = self._client.ping.get()
+            return response
+        except ApiClientError as error:
+            print("Error: {}".format(error.text))
  
     def create_folder(self, foldername: str) -> int:
         """
@@ -116,14 +118,17 @@ class MailchimpManager:
             TODO: Document all possible errors
         """
         if type(foldername) != str:
-            raise ValueError
-        elif foldername = "":
+            raise TypeError
+        elif foldername == "":
             raise ValueError
         elif len(foldername) <= 4:
             raise ValueError
-        self.client.set_config(self.keys)
-        response = client.fileManager.create_folder({"name": foldername})
-        return response["id"]
+        try :
+           # self._client.set_config(self.keys) do not need to repeat this line as the configurations have been set in the set_auth()
+            response = self._client.fileManager.create_folder({"name": foldername})
+            return response["id"]
+        except ApiClientError as error:
+            print("Error: {}".format(error.text)) 
     
     def upload_certificates(self, attendees: AttendeeManager,
                             folder_id: int = None,
@@ -146,7 +151,7 @@ class MailchimpManager:
             TODO: Document potential errors.
         """
         mailchimp = Client()
-        mailchimp.set_config(self.keys)
+        #mailchimp.set_config(self.keys) again shouldnt need to set configurations as the set authorisation function handles that
         operations = []
         for attendee in attendees:
             pdf_file = attendee.file_path
@@ -158,9 +163,8 @@ class MailchimpManager:
                 "operation_id": str(attendee.email),  #if there is an attribute to the attendee object for an id or else a name
                 "body":json.dumps({
                     "name"  : os.path.basename(pdf_file), #returns a string with the base name of the file path
-                    "file_data": base64_file
-                    "folder_id": folder_id
-                        })
+                    "file_data": base64_file,
+                    "folder_id": folder_id})  
                     }
             operations.append(operation)
 
@@ -172,9 +176,12 @@ class MailchimpManager:
         finished = False
         while finished == False:
             response_batch = mailchimp.batches.status(batch_id)
-            if response_batch['status'] == 'finished':
-                finished = True
-
+            successfull_operations = response_batch['finished_operations']
+            error_operations = response_batch['errored_operations']
+            status = response_batch['status']
+            BatchStatusFunc(status, successfull_operations, error_operations) #updating the callback fucntions to upload with the information of the bath request
+            if status == 'finished':
+                finished = True 
         response_url = response_batch['response_body_url']
         return response_url
         
