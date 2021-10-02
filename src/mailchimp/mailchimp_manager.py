@@ -78,7 +78,7 @@ class MailchimpManager:
                 raise TypeError
             elif value == "":
                 raise ValueError
-        self._client.set_config(keys) # setting th econfigurations just once then this line will not be repeated in any fucntions
+        self._client.set_config(keys.copy()) # setting th econfigurations just once then this line will not be repeated in any fucntions
         health_status = {"health_status": "Everything's Chimpy!"}
         if self.ping() == health_status:
             authorisation = True
@@ -150,7 +150,6 @@ class MailchimpManager:
         Raises:
             TODO: Document potential errors.
         """
-        mailchimp = Client()
         #mailchimp.set_config(self.keys) again shouldnt need to set configurations as the set authorisation function handles that
         operations = []
         for attendee in attendees:
@@ -171,11 +170,11 @@ class MailchimpManager:
         payload = {
                 "operations": operations
                     }
-        response = mailchimp.batches.start(payload)
+        response = self._client.batches.start(payload)
         batch_id = response['id']
         finished = False
         while finished == False:
-            response_batch = mailchimp.batches.status(batch_id)
+            response_batch = self._client.batches.status(batch_id)
             successfull_operations = response_batch['finished_operations']
             error_operations = response_batch['errored_operations']
             status = response_batch['status']
