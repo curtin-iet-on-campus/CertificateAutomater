@@ -27,6 +27,20 @@ def run_cli(argv: Dict[str, str]):
 
 # TODO: Decide on needed CLI public functions
 
+def load_attendees(path: str) -> AttendeeManager:
+    """
+    Checks the status of the loading of attendees and returns an AttendeeManager.
+
+    Args:
+        path(str): The path to the attendees CSV.
+
+    Return:
+        AttendeeManager: the CSV file of attendees converted to an AttendeeManager.
+
+    Raise:
+        OSError: if there is an error with loading attendees.
+    """
+    raise NotImplementedError
 
 
 
